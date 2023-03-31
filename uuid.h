@@ -32,8 +32,8 @@
  * %End-Header%
  */
 
-#ifndef _LIBUUID_WIN_UUID_H
-#define _LIBUUID_WIN_UUID_H
+#ifndef _UUID_WIN_UUID_H
+#define _UUID_WIN_UUID_H
 
 #ifdef uuid_t
 #undef uuid_t
@@ -45,17 +45,14 @@ extern "C" {
 #endif
 
 /* gen_uuid_win.c */
-__declspec(dllexport)
 extern void uuid_generate_random(uuid_t out);
-__declspec(dllexport)
 extern void uuid_generate_time(uuid_t out);
 
 /* unparse.c */
-__declspec(dllexport)
 extern void uuid_unparse(const uuid_t uu, char *out);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _LIBUUID_WIN_UUID_H */
+#endif /* _UUID_WIN_UUID_H */

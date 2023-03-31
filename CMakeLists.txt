@@ -14,33 +14,37 @@
 
 cmake_minimum_required ( VERSION 3.0 )
 
-project ( uuid_win C )
+project ( uuid C )
 
-add_library ( uuid_win STATIC
+add_library ( ${PROJECT_NAME} STATIC
     gen_uuid_win.c
     unparse.c
     uuid.h )
         
-target_include_directories ( uuid_win BEFORE PRIVATE 
+target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE 
+    ${CMAKE_CURRENT_LIST_DIR} )
+ 
+target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE 
     ${CMAKE_CURRENT_LIST_DIR} )
 
 enable_testing()
 
-add_executable ( uuid_win_test
+add_executable ( ${PROJECT_NAME}_test
     test.c
     uuid.h )
 
-target_include_directories ( uuid_win_test BEFORE PRIVATE 
+target_include_directories ( ${PROJECT_NAME}_test BEFORE PRIVATE 
     ${CMAKE_CURRENT_LIST_DIR} )
 
-target_link_libraries ( uuid_win_test PRIVATE
-    uuid_win
+target_link_libraries ( ${PROJECT_NAME}_test PRIVATE
+    ${PROJECT_NAME}
     rpcrt4 )
 
-add_test ( uuid_win_test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/uuid_win_test.exe )
+add_test ( ${PROJECT_NAME}_test
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}_test.exe )
 
-install ( TARGETS uuid_win
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/dist/lib )
+install ( TARGETS ${PROJECT_NAME}
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
 
 install ( FILES uuid.h
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/dist/include )
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/include )
