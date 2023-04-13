@@ -45,11 +45,24 @@ extern "C" {
 #endif
 
 /* gen_uuid_win.c */
-extern void uuid_generate_random(uuid_t out);
-extern void uuid_generate_time(uuid_t out);
+extern
+#ifndef BUILDING_UUID_WIN_DLL
+__declspec(dllimport)
+#endif // !BUILDING_UUID_WIN_DLL
+void uuid_generate_random(uuid_t out);
+
+extern
+#ifndef BUILDING_UUID_WIN_DLL
+__declspec(dllimport)
+#endif // !BUILDING_UUID_WIN_DLL
+void uuid_generate_time(uuid_t out);
 
 /* unparse.c */
-extern void uuid_unparse(const uuid_t uu, char *out);
+extern
+#ifndef BUILDING_UUID_WIN_DLL
+__declspec(dllimport)
+#endif // !BUILDING_UUID_WIN_DLL
+void uuid_unparse(const uuid_t uu, char *out);
 
 #ifdef __cplusplus
 }

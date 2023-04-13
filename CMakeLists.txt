@@ -32,20 +32,24 @@
 # %End-Header%
 #
 
-cmake_minimum_required ( VERSION 3.0 )
+cmake_minimum_required ( VERSION 3.4 )
 
-project ( uuid C )
+project ( uuid_win C )
 
-add_library ( ${PROJECT_NAME} STATIC
+add_library ( ${PROJECT_NAME} SHARED
     gen_uuid_win.c
     unparse.c
-    uuid.h )
+    uuid.h
+    ${PROJECT_NAME}.def )
         
 target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE 
     ${CMAKE_CURRENT_LIST_DIR} )
- 
-target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE 
-    ${CMAKE_CURRENT_LIST_DIR} )
+
+target_compile_definitions ( ${PROJECT_NAME} PRIVATE
+    BUILDING_UUID_WIN_DLL )
+
+target_link_libraries ( ${PROJECT_NAME} PRIVATE
+    rpcrt4 )
 
 enable_testing()
 
@@ -57,14 +61,26 @@ target_include_directories ( ${PROJECT_NAME}_test BEFORE PRIVATE
     ${CMAKE_CURRENT_LIST_DIR} )
 
 target_link_libraries ( ${PROJECT_NAME}_test PRIVATE
-    ${PROJECT_NAME}
-    rpcrt4 )
+    ${PROJECT_NAME} )
 
 add_test ( ${PROJECT_NAME}_test
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}_test.exe )
 
-install ( TARGETS ${PROJECT_NAME}
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
+install( FILES
+    $<TARGET_FILE:${PROJECT_NAME}>
+    $<TARGET_PDB_FILE:${PROJECT_NAME}>
+    DESTINATION bin )
+ 
+install( FILES
+    $<TARGET_LINKER_FILE:${PROJECT_NAME}>
+    DESTINATION lib
+    OPTIONAL )
 
-install ( FILES uuid.h
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/include )
+install ( FILES
+    uuid.h
+    DESTINATION include )
+ 
+install ( FILES
+    COPYING.BSD-3-Clause
+    README.md
+    DESTINATION . )
